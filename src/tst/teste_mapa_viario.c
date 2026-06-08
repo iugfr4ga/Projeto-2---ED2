@@ -9,7 +9,7 @@ void setUp(void) {
 }
 
 void tearDown(void) {
-    mapa_destruir(m);
+    mapa_fechar(m);
     m = NULL;
 }
 

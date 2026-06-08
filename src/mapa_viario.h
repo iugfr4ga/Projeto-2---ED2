@@ -5,11 +5,11 @@ typedef struct MapaViario MapaViario;
 typedef struct Vertice Vertice;
 typedef struct Aresta Aresta;
 
-/* Cria um mapa viário vazio. Retorna NULL em erro. */
-MapaViario* mapa_criar(void);
+/* Cria um mapa viário vazio com nv vértices. Retorna NULL em erro. */
+MapaViario* mapa_criar(int nv);
 
-/* Destrói o mapa e libera toda a memória. */
-void mapa_destruir(MapaViario* m);
+/* Fecha o mapa e libera toda a memória. */
+void mapa_fechar(MapaViario* m);
 
 /*  Insere um vértice com identificador id e coordenadas (x, y).
     Retorna 0 em sucesso ou -1 se id já existe ou erro.
