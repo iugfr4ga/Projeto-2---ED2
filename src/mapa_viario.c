@@ -31,6 +31,14 @@ struct MapaViario {
     int n_inseridos;      // quantos vértices foram inseridos até agora
 };
 
+static int buscar_indice(const MapaViario* m, const char* id) {
+    for(int i = 0; i < m->n_inseridos; i++) {
+        if(strcmp(m->vertices[i].id, id) == 0)
+            return i;
+    }
+    return -1;
+}
+
 MapaViario* mapa_criar(int nv) {
     if(nv <= 0)
         return NULL;
@@ -67,5 +75,55 @@ void mapa_fechar(MapaViario* m) {
     free(m);
 }
 
+int mapa_inserir_vertice(MapaViario* m, const char* id, double x, double y) {
+    if(m == NULL || id == NULL)
+        return -1;
+ 
+    if(m->n_inseridos >= m->nv)
+        return -1;
+ 
+    if(buscar_indice(m, id) != -1)
+        return -1;
+ 
+    Vertice* v = &m->vertices[m->n_inseridos];
+    strncpy(v->id, id, ID_TAM - 1);
+    v->id[ID_TAM - 1] = '\0';
+    v->x = x;
+    v->y = y;
+    v->indice = m->n_inseridos;
+    v->arestas = NULL;
+    m->n_inseridos++;
 
+    return 0;
+}
+
+int mapa_inserir_aresta(MapaViario* m, const char* i, const char* j, const char* ldir, const char* lesq, double cmp, double vm, const char* nome) {
+    if(m == NULL || i == NULL || j == NULL)
+        return -1;
+ 
+    int idc_i = buscar_indice(m, i);
+    int idc_j = buscar_indice(m, j);
+ 
+    if(idc_i == -1 || idc_j == -1)
+        return -1;
+ 
+    Aresta* a = malloc(sizeof(Aresta));
+    if(a == NULL)
+        return -1;
+ 
+    a->destino = &m->vertices[idc_j];   
+    strncpy(a->ldir, ldir, CEP_TAM - 1);  
+    a->ldir[CEP_TAM - 1] = '\0';
+    strncpy(a->lesq, lesq, CEP_TAM - 1);  
+    a->lesq[CEP_TAM - 1] = '\0';
+    strncpy(a->nome, nome, NOME_TAM - 1); 
+    a->nome[NOME_TAM - 1] = '\0';
+    a->cmp = cmp;
+    a->vm = vm;
+ 
+    a->prox = m->vertices[idc_i].arestas;
+    m->vertices[idc_i].arestas = a;
+ 
+    return 0;
+}
 
