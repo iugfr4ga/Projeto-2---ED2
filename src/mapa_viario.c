@@ -127,3 +127,95 @@ int mapa_inserir_aresta(MapaViario* m, const char* i, const char* j, const char*
     return 0;
 }
 
+const Vertice* mapa_buscar_vertice(const MapaViario* m, const char* id) {
+    if(m == NULL || id == NULL)
+        return NULL;
+ 
+    int idc = buscar_indice(m, id);
+    if(idc == -1)
+        return NULL;
+ 
+    return &m->vertices[idc];
+}
+
+const Vertice* mapa_vertice_mais_proximo(const MapaViario* m, double x, double y) {
+    if(m == NULL || m->n_inseridos == 0)
+        return NULL;
+ 
+    const Vertice* mais_proximo = &m->vertices[0];
+    double dx = m->vertices[0].x - x;
+    double dy = m->vertices[0].y - y;
+    double menor_dist = dx * dx + dy * dy;
+ 
+    for(int i = 1; i < m->n_inseridos; i++) {
+        dx = m->vertices[i].x - x;
+        dy = m->vertices[i].y - y;
+        double dist = dx * dx + dy * dy;
+        if(dist < menor_dist) {
+            menor_dist = dist;
+            mais_proximo = &m->vertices[i];
+        }
+    }
+ 
+    return mais_proximo;
+}
+
+int mapa_atualizar_vm_regiao(MapaViario* m, double x, double y, double w, double h, double vm) {
+    if(m == NULL)
+        return 0;
+ 
+    int atualizadas = 0;
+ 
+    for(int i = 0; i < m->n_inseridos; i++) {
+        Vertice* v = &m->vertices[i];
+ 
+        if(v->x >= x && v->x <= x - w && v->y >= y && v->y <= y - h) {
+            for(Aresta* a = v->arestas; a != NULL; a = a->prox) {
+                a->vm = vm;
+                atualizadas++;
+            }
+        }
+    }
+ 
+    return atualizadas;
+}
+
+const char* vertice_get_id(const Vertice* v) { 
+    return v->id; 
+}
+
+double vertice_get_x(const Vertice* v) { 
+    return v->x;  
+}
+
+double vertice_get_y(const Vertice* v) { 
+    return v->y;  
+}
+
+int vertice_get_indice(const Vertice* v) { 
+    return v->indice; 
+}
+
+const Vertice* aresta_get_destino(const Aresta* a) { 
+    return a->destino; 
+}
+
+const char* aresta_get_nome(const Aresta* a) { 
+    return a->nome;    
+}
+
+const char* aresta_get_ldir(const Aresta* a) { 
+    return a->ldir;    
+}
+
+const char* aresta_get_lesq(const Aresta* a) { 
+    return a->lesq;    
+}
+
+double aresta_get_cmp(const Aresta* a) { 
+    return a->cmp;     
+}
+
+double aresta_get_vm(const Aresta* a) { 
+    return a->vm;      
+}

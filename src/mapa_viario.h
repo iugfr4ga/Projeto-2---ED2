@@ -38,8 +38,7 @@ int mapa_atualizar_vm_regiao(MapaViario* m, double x, double y, double w, double
 const char* vertice_get_id(const Vertice* v);
 double vertice_get_x(const Vertice* v);
 double vertice_get_y(const Vertice* v);
-const char* aresta_get_origem(const Aresta* a);
-const char* aresta_get_destino(const Aresta* a);
+const Vertice* aresta_get_destino(const Aresta* a);
 const char* aresta_get_nome(const Aresta* a);
 const char* aresta_get_ldir(const Aresta* a);
 const char* aresta_get_lesq(const Aresta* a);
