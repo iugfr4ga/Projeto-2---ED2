@@ -38,6 +38,6 @@
     O arquivo deve estar no caminho indicado por *caminho.
     Retorna 0 em sucesso ou -1 se o arquivo em erro (arquivo não pode ser aberto, parâmetros inválidos).
 */
-int qry_processar(const char* caminho, MapaViario* m, FILE* txt);
+int qry_processar(const char* caminho, MapaViario* m);
 
 #endif

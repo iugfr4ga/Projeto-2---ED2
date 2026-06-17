@@ -7,7 +7,7 @@
 #define VIA_VALIDO "/tmp/test_valido.via"
 #define VIA_VAZIO "/tmp/test_vazio.via"
 #define VIA_SEM_ARESTAS "/tmp/test_sem_arestas.via"
-#define VIA_INEXISTENTE "/tmp/nao_existe_xyz.via"
+#define VIA_INEXISTENTE "/tmp/nao_existe.via"
 
 static void criar_arquivo(const char* caminho, const char* conteudo) {
     FILE* f = fopen(caminho, "w");
