@@ -2,7 +2,6 @@
 #define QRY_H
 
 #include "mapa_viario.h"
-#include <stdio.h>
 
 /*  Um arquivo .qry executa comandos sobre o mapa viário de uma cidade gera saídas em TXT e SVG.
     Os comandos do arquivo .qry são:
