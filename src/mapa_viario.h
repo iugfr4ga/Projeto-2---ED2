@@ -5,10 +5,10 @@ typedef struct MapaViario MapaViario;
 typedef struct Vertice Vertice;
 typedef struct Aresta Aresta;
 
-/* Cria um mapa viário vazio com nv vértices. Retorna NULL em erro. */
+/*  Cria um mapa viário vazio com nv vértices. Retorna NULL em erro. */
 MapaViario* mapa_criar(int nv);
 
-/* Fecha o mapa e libera toda a memória. */
+/*  Fecha o mapa e libera toda a memória. */
 void mapa_fechar(MapaViario* m);
 
 /*  Insere um vértice com identificador id e coordenadas (x, y).
@@ -22,7 +22,7 @@ int mapa_inserir_vertice(MapaViario* m, const char* id, double x, double y);
 */
 int mapa_inserir_aresta(MapaViario* m, const char* i, const char* j, const char* ldir, const char* lesq, double cmp, double vm, const char* nome);
 
-/* Retorna o vértice com o id indicado ou NULL se não encontrado. */
+/*  Retorna o vértice com o id indicado ou NULL se não encontrado. */
 const Vertice* mapa_buscar_vertice(const MapaViario* m, const char* id);
 
 /*  Retorna o vértice mais próximo do ponto (x, y).
@@ -35,6 +35,7 @@ const Vertice* mapa_vertice_mais_proximo(const MapaViario* m, double x, double y
 */
 int mapa_atualizar_vm_regiao(MapaViario* m, double x, double y, double w, double h, double vm);
 
+/*  Getters */
 const char* vertice_get_id(const Vertice* v);
 double vertice_get_x(const Vertice* v);
 double vertice_get_y(const Vertice* v);

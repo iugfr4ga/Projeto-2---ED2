@@ -95,7 +95,7 @@ int qry_processar(const char* caminho, MapaViario* m) {
                 cmd_exp(m, vl);
         }
         else if(strcmp(cmd, "p?") == 0) {
-            char sreg1[ID_TAM], sreg2[ID_TAM], cc[COR_TAM], cr[COR_TAM];
+            char sreg1[4], sreg2[4], cc[COR_TAM], cr[COR_TAM];
             if(sscanf(linha, "%*s %3s %3s %15s %15s", sreg1, sreg2, cc, cr) == 4) {
                 int reg1 = get_registrador(sreg1);
                 int reg2 = get_registrador(sreg2);
