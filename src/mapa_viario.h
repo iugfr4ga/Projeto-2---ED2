@@ -37,13 +37,19 @@ int mapa_atualizar_vm_regiao(MapaViario* m, double x, double y, double w, double
 
 /*  Getters */
 const char* vertice_get_id(const Vertice* v);
+int vertice_get_indice(const Vertice* v);
 double vertice_get_x(const Vertice* v);
 double vertice_get_y(const Vertice* v);
+const Aresta* vertice_get_arestas(const Vertice* v);
+const Aresta* aresta_get_prox(const Aresta* a);
 const Vertice* aresta_get_destino(const Aresta* a);
 const char* aresta_get_nome(const Aresta* a);
 const char* aresta_get_ldir(const Aresta* a);
 const char* aresta_get_lesq(const Aresta* a);
 double aresta_get_cmp(const Aresta* a);
 double aresta_get_vm(const Aresta* a);
+const Vertice* mapa_get_vertice_por_indice(const MapaViario* m, int i);
+int mapa_get_n_inseridos(const MapaViario* m);
+
 
 #endif

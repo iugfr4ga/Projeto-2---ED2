@@ -219,3 +219,26 @@ double aresta_get_cmp(const Aresta* a) {
 double aresta_get_vm(const Aresta* a) { 
     return a->vm;      
 }
+
+const Aresta* vertice_get_arestas(const Vertice* v) { 
+    return v ? v->arestas : NULL; 
+}
+
+const Aresta* aresta_get_prox(const Aresta* a) { 
+    return a ? a->prox : NULL; 
+}
+
+int vertice_get_indice(const Vertice* v) { 
+    return v ? v->indice  : -1;  
+}
+
+int mapa_get_n_inseridos(const MapaViario* m) { 
+    return m ? m->n_inseridos : 0; 
+}
+
+const Vertice* mapa_get_vertice_por_indice(const MapaViario* m, int i) {
+    if(m == NULL || i < 0 || i >= m->n_inseridos) 
+        return NULL;
+
+    return &m->vertices[i];
+}
