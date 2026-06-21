@@ -89,3 +89,69 @@ Caminho* dijkstra(const MapaViario* m, const Vertice* origem, Criterio criterio)
     free(visitado);
     return c;
 }
+
+PassoCaminho* caminho_reconstruir(const Caminho* c, const Vertice* destino) {
+    if(c == NULL || destino == NULL)
+        return NULL;
+
+    int d = vertice_get_indice(destino);
+    if(c->dist[d] == DBL_MAX)
+        return NULL;
+
+    PassoCaminho* lista = NULL;
+    int v = d;
+
+    while(v != -1) {
+        PassoCaminho* p = malloc(sizeof(struct PassoCaminho));
+        if(p == NULL) {
+            caminho_lista_fechar(lista);
+            return NULL;
+        }
+
+        p->vertice = mapa_get_vertice_por_indice(c->m, v);
+        p->aresta = c->aresta_anterior[v];
+        p->prox = lista;
+        lista = p;
+
+        v = c->anterior[v];
+    }
+    return lista;
+}
+
+double caminho_custo(const Caminho* c, const Vertice* destino) {
+    if(c == NULL || destino == NULL)
+        return -1.0;
+    int d = vertice_get_indice(destino);
+    if(c->dist[d] == DBL_MAX)
+        return -1.0;
+    return c->dist[d];
+}
+
+void caminho_fechar(Caminho* c) {
+    if(c == NULL)
+        return;
+    free(c->dist);
+    free(c->anterior);
+    free(c->aresta_anterior);
+    free(c);
+}
+
+const Vertice* passo_get_vertice(const PassoCaminho* p) {
+    return p ? p->vertice : NULL;
+}
+
+const Aresta* passo_get_aresta(const PassoCaminho* p) {
+    return p ? p->aresta : NULL;
+}
+
+const PassoCaminho* passo_get_prox(const PassoCaminho* p) {
+    return p ? p->prox : NULL;
+}
+
+void caminho_lista_fechar(PassoCaminho* p) {
+    while(p != NULL) {
+        PassoCaminho* prox = p->prox;
+        free(p);
+        p = prox;
+    }
+}
