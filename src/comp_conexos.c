@@ -238,3 +238,51 @@ Componentes* componentes_calcular(const MapaViario* m, double vl) {
     }
     return c;
 }
+
+int componentes_get_quantidade(const Componentes* c) {
+    return c ? c->quantidade : 0;
+}
+
+int componentes_get_componente(const Componentes* c, const Vertice* v) {
+    if(c == NULL || v == NULL) 
+        return -1;
+    int i = vertice_get_indice(v);
+    if(i < 0 || i >= c->nv) 
+        return -1;
+    return c->comp[i];
+}
+
+double componentes_get_xmin(const Componentes* c, int k) {
+    if(c == NULL || k < 0 || k >= c->quantidade) 
+        return 0.0;
+    return c->xmin[k];
+}
+
+double componentes_get_ymin(const Componentes* c, int k) {
+    if(c == NULL || k < 0 || k >= c->quantidade) 
+        return 0.0;
+    return c->ymin[k];
+}
+
+double componentes_get_xmax(const Componentes* c, int k) {
+    if(c == NULL || k < 0 || k >= c->quantidade) 
+        return 0.0;
+    return c->xmax[k];
+}
+
+double componentes_get_ymax(const Componentes* c, int k) {
+    if(c == NULL || k < 0 || k >= c->quantidade) 
+        return 0.0;
+    return c->ymax[k];
+}
+
+void componentes_fechar(Componentes* c) {
+    if(c == NULL) 
+        return;
+    free(c->comp);
+    free(c->xmin);
+    free(c->ymin);
+    free(c->xmax);
+    free(c->ymax);
+    free(c);
+}
