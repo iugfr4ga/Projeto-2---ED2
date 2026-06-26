@@ -169,7 +169,7 @@ int mapa_atualizar_vm_regiao(MapaViario* m, double x, double y, double w, double
     for(int i = 0; i < m->n_inseridos; i++) {
         Vertice* v = &m->vertices[i];
  
-        if(v->x >= x && v->x <= x - w && v->y >= y && v->y <= y - h) {
+        if(v->x >= x && v->x <= x + w && v->y >= y && v->y <= y + h) {
             for(Aresta* a = v->arestas; a != NULL; a = a->prox) {
                 a->vm = vm;
                 atualizadas++;
