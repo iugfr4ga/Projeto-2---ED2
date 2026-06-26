@@ -1,8 +1,11 @@
 #include "qry.h"
 #include "mapa_viario.h"
 #include "cidade.h"
+#include "comp_conexos.h"
+#include "agm.h"
+#include "dijkstra.h"
 #include "svg.h"
-#include "txt.h"
+//#include "txt.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -20,30 +23,90 @@ typedef struct {
 
 static Registrador registradores[N_REGISTRADORES];
 
-static void cmd_o(MapaViario* m, int reg, const char* cep, char face, double num) {
+static void cmd_o(int reg, const char* cep, char face, int num) {
+    double x, y;
+    if(cidade_coordenadas(cep, face, num, "1", &x, &y) != 0) 
+        return;
 
+    registradores[reg].x = x;
+    registradores[reg].y = y;
+    registradores[reg].valido = 1;
+
+    svg_desenhar_registrador(x, reg);
+    // TODO: txt reportar coordenada
 }
 
 static void cmd_mvm(MapaViario* m, double v, double x, double y, double w, double h) {
-
+    mapa_atualizar_vm_regiao(m, x, y, w, h, v);
 }
 
 static void cmd_regs(MapaViario* m, double vl) {
+    Componentes* c = componentes_calcular(m, vl);
+    if(c == NULL) 
+        return;
 
+    // TODO: txt reportar num componentes conexos
+    svg_desenhar_componentes(c);
+    componentes_fechar(c);
 }
 
 static void cmd_exp(MapaViario* m, double vl) {
+    AGM* agm = agm_calcular(m);
+    if(agm == NULL) 
+        return;
 
+    int nv = mapa_get_n_inseridos(m);
+    for(int i = 0; i < nv; i++) {
+        const Vertice* v = mapa_get_vertice_por_indice(m, i);
+        for(const Aresta* a = vertice_get_arestas(v); a != NULL; a = aresta_get_prox(a)) {
+            if(agm_contem_aresta(agm, a) && aresta_get_vm(a) < vl) {
+                // TODO: atualizar velocidade da aresta
+                svg_desenhar_aresta(v, a);
+            }
+        }
+    }
+    agm_fechar(agm);
 }
 
 static void cmd_p(MapaViario* m, int reg1, int reg2, const char* cc, const char* cr) {
+    if(!registradores[reg1].valido || !registradores[reg2].valido) 
+        return;
+    
+    double x0 = registradores[reg1].x, y0 = registradores[reg1].y;
+    double xf = registradores[reg2].x, yf = registradores[reg2].y;
 
+    const Vertice* origem  = mapa_vertice_mais_proximo(m, x0, y0);
+    const Vertice* destino = mapa_vertice_mais_proximo(m, xf, yf);
+
+    // caminho mais curto
+    Caminho* cd = dijkstra(m, origem, DISTANCIA);
+    PassoCaminho* pd = caminho_reconstruir(cd, destino);
+    if(pd == NULL) {
+        // TODO: txt destino inacessivel
+    } else {
+        svg_desenhar_percurso(pd, cc, x0, y0, xf, yf, caminho_custo(cd, destino) * 0.01);
+        // TODO: txt descrever percurso
+        caminho_lista_fechar(pd);
+    }
+    caminho_fechar(cd);
+
+    // caminho mais rapido
+    Caminho* ct = dijkstra(m, origem, TEMPO);
+    PassoCaminho* pt = caminho_reconstruir(ct, destino);
+    if(pt == NULL) {
+        // TODO: txt destino inacessivel
+    } else {
+        svg_desenhar_percurso(pt, cr, x0, y0, xf, yf, caminho_custo(ct, destino) * 0.01);
+        // TODO: txt descrever percurso
+        caminho_lista_fechar(pt);
+    }
+    caminho_fechar(ct);
 }
 
 static int get_registrador(const char* s) {
     if(s == NULL || (s[0] != 'R' && s[0] != 'r'))
         return -1;
-    int n = atoi(s[1]);
+    int n = atoi(&s[1]);
     if(n < 0 || n > 10)
         return -1;
     return n;
@@ -71,12 +134,12 @@ int qry_processar(const char* caminho, MapaViario* m) {
             continue;
 
         if(strcmp(cmd, "@o?") == 0) {
-            char sreg[4], cep[CEP_TAM],face;
-            double num;
-            if(sscanf(linha, "%*s %3s %31s %c %lf", sreg, cep, &face, &num) == 4) {
+            char sreg[4], cep[CEP_TAM], face;
+            int num;
+            if(sscanf(linha, "%*s %3s %31s %c %d", sreg, cep, &face, &num) == 4) {
                 int reg = get_registrador(sreg);
                 if(reg != -1)
-                    cmd_o(m, reg, cep, face, num);
+                    cmd_o(reg, cep, face, num);
             }
         }
         else if(strcmp(cmd, "mvm") == 0) {
