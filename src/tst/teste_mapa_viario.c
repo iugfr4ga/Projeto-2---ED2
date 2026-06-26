@@ -135,6 +135,21 @@ void test_atualizar_vm_regiao_multiplas_arestas(void) {
     TEST_ASSERT_EQUAL_INT(2, atualizadas);
 }
 
+void test_atualizar_vm_aresta(void) {
+    mapa_inserir_vertice(m, "v1", 10.0, 10.0);
+    mapa_inserir_vertice(m, "v2", 50.0, 10.0);
+    mapa_inserir_aresta(m, "v1", "v2", "-", "-", 40.0, 4.0, "Rua_A");
+    const Vertice* v = mapa_buscar_vertice(m, "v1");
+    const Aresta* a = vertice_get_arestas(v);
+    int nova_vm = aresta_atualizar_vm((Aresta*)a);
+    TEST_ASSERT_EQUAL_INT(6, nova_vm);
+}
+
+void test_atualizar_vm_aresta_nula_retorna_erro(void) {
+    int nova_vm = aresta_atualizar_vm(NULL);
+    TEST_ASSERT_EQUAL_INT(-1, nova_vm);
+}
+
 int main(void) {
     UNITY_BEGIN();
 
@@ -155,6 +170,8 @@ int main(void) {
     RUN_TEST(test_atualizar_vm_regiao_atualiza_arestas_dentro);
     RUN_TEST(test_atualizar_vm_regiao_nao_atualiza_fora);
     RUN_TEST(test_atualizar_vm_regiao_multiplas_arestas);
+    RUN_TEST(test_atualizar_vm_aresta);
+    RUN_TEST(test_atualizar_vm_aresta_nula_retorna_erro);
 
     return UNITY_END();
 }

@@ -176,8 +176,15 @@ int mapa_atualizar_vm_regiao(MapaViario* m, double x, double y, double w, double
             }
         }
     }
- 
     return atualizadas;
+}
+
+int aresta_atualizar_vm(Aresta* a) {
+    if(a == NULL)
+        return -1; 
+    
+    a->vm += a->vm * 0.5;
+    return a->vm;
 }
 
 const char* vertice_get_id(const Vertice* v) { 

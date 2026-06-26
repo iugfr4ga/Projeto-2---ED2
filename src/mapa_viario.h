@@ -35,6 +35,11 @@ const Vertice* mapa_vertice_mais_proximo(const MapaViario* m, double x, double y
 */
 int mapa_atualizar_vm_regiao(MapaViario* m, double x, double y, double w, double h, double vm);
 
+/*  Aumenta em 50% a velocidade média de uma aresta.
+    Retorna a nova velocidade média ou -1 em erro.
+*/
+int aresta_atualizar_vm(Aresta* a);
+
 /*  Getters */
 const char* vertice_get_id(const Vertice* v);
 int vertice_get_indice(const Vertice* v);
