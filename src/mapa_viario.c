@@ -192,10 +192,6 @@ double vertice_get_y(const Vertice* v) {
     return v->y;  
 }
 
-int vertice_get_indice(const Vertice* v) { 
-    return v->indice; 
-}
-
 const Vertice* aresta_get_destino(const Aresta* a) { 
     return a->destino; 
 }

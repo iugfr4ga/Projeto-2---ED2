@@ -1,6 +1,6 @@
-#include "unity.h"
-#include "dijkstra.h"
-#include "mapa_viario.h"
+#include "unity/unity.h"
+#include "../dijkstra.h"
+#include "../mapa_viario.h"
 #include <stdlib.h>
 
 static MapaViario* m;

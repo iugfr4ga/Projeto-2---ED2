@@ -18,7 +18,7 @@ static const char* cores_componentes[SVG_MAX_CORES] = {"red", "blue", "green", "
 static int svg_path_id = 0;
 
 int svg_inicializar(const char* caminho, double largura, double altura) {
-    if(caminho == NULL) 
+    if(caminho == NULL || largura <= 0 || altura <= 0) 
         return -1;
 
     svg_arquivo = fopen(caminho, "w");

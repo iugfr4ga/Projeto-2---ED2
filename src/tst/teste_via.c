@@ -1,6 +1,6 @@
-#include "unity.h"
-#include "via.h"
-#include "mapa_viario.h"
+#include "unity/unity.h"
+#include "../via.h"
+#include "../mapa_viario.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -54,9 +54,9 @@ void test_via_processar_so_vertices(void) {
 
     MapaViario* m = via_processar(VIA_SEM_ARESTAS);
     TEST_ASSERT_NOT_NULL(m);
-    TEST_ASSERT_EQUAL_INT(3, mapa_num_vertices(m));
+    TEST_ASSERT_EQUAL_INT(3, mapa_get_n_inseridos(m));
 
-    mapa_destruir(m);
+    mapa_fechar(m);
     remover_arquivo(VIA_SEM_ARESTAS);
 }
 
@@ -73,7 +73,7 @@ void test_via_processar_retorna_mapa_nao_nulo(void) {
     MapaViario* m = via_processar(VIA_VALIDO);
     TEST_ASSERT_NOT_NULL(m);
 
-    mapa_destruir(m);
+    mapa_fechar(m);
     remover_arquivo(VIA_VALIDO);
 }
 
@@ -88,9 +88,9 @@ void test_via_processar_numero_correto_de_vertices(void) {
 
     MapaViario* m = via_processar(VIA_VALIDO);
     TEST_ASSERT_NOT_NULL(m);
-    TEST_ASSERT_EQUAL_INT(3, mapa_num_vertices(m));
+    TEST_ASSERT_EQUAL_INT(3, mapa_get_n_inseridos(m));
 
-    mapa_destruir(m);
+    mapa_fechar(m);
     remover_arquivo(VIA_VALIDO);
 }
 
@@ -114,7 +114,7 @@ void test_via_processar_vertices_com_coordenadas_corretas(void) {
     TEST_ASSERT_EQUAL_DOUBLE(110.0, vertice_get_x(v2));
     TEST_ASSERT_EQUAL_DOUBLE(70.0,  vertice_get_y(v2));
 
-    mapa_destruir(m);
+    mapa_fechar(m);
     remover_arquivo(VIA_VALIDO);
 }
 
@@ -129,7 +129,7 @@ void test_via_processar_aresta_sem_quadras_adjacentes(void) {
     MapaViario* m = via_processar(VIA_VALIDO);
     TEST_ASSERT_NOT_NULL(m);
 
-    mapa_destruir(m);
+    mapa_fechar(m);
     remover_arquivo(VIA_VALIDO);
 }
 
@@ -144,7 +144,7 @@ void test_via_processar_aresta_com_quadras_adjacentes(void) {
     MapaViario* m = via_processar(VIA_VALIDO);
     TEST_ASSERT_NOT_NULL(m);
 
-    mapa_destruir(m);
+    mapa_fechar(m);
     remover_arquivo(VIA_VALIDO);
 }
 
@@ -160,7 +160,7 @@ void test_via_processar_arestas_opostas(void) {
     MapaViario* m = via_processar(VIA_VALIDO);
     TEST_ASSERT_NOT_NULL(m);
 
-    mapa_destruir(m);
+    mapa_fechar(m);
     remover_arquivo(VIA_VALIDO);
 }
 
@@ -173,9 +173,9 @@ void test_via_processar_aresta_vertice_inexistente_nao_quebra(void) {
 
     MapaViario* m = via_processar(VIA_VALIDO);
     TEST_ASSERT_NOT_NULL(m);
-    TEST_ASSERT_EQUAL_INT(1, mapa_num_vertices(m));
+    TEST_ASSERT_EQUAL_INT(1, mapa_get_n_inseridos(m));
 
-    mapa_destruir(m);
+    mapa_fechar(m);
     remover_arquivo(VIA_VALIDO);
 }
 

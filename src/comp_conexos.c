@@ -1,6 +1,7 @@
 #include "comp_conexos.h"
 #include "mapa_viario.h"
 #include <stdlib.h>
+#include <string.h>
 #include <float.h>
 
 struct Componentes {

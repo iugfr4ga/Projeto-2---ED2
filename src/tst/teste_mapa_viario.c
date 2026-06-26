@@ -1,11 +1,11 @@
-#include "unity.h"
-#include "mapa_viario.h"
+#include "unity/unity.h"
+#include "../mapa_viario.h"
 #include <stdlib.h>
 
 static MapaViario* m;
 
 void setUp(void) {
-    m = mapa_criar();
+    m = mapa_criar(32);
 }
 
 void tearDown(void) {
