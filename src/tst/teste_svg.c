@@ -80,7 +80,7 @@ void test_svg_desenhar_quadra_cep(void) {
 }
 
 void test_svg_desenhar_registrador_line(void) {
-    svg_desenhar_registrador(50.0, 3);
+    svg_desenhar_registrador(50.0, 0.0,3);
     svg_finalizar();
 
     char buf[1024];
@@ -92,7 +92,7 @@ void test_svg_desenhar_registrador_line(void) {
 }
 
 void test_svg_desenhar_registrador_numero(void) {
-    svg_desenhar_registrador(50.0, 7);
+    svg_desenhar_registrador(50.0, 0.0, 7);
     svg_finalizar();
 
     char buf[1024];

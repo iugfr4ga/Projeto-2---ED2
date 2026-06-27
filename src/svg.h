@@ -18,8 +18,8 @@ void svg_finalizar(void);
 */
 void svg_desenhar_quadra(const char* cep, double x, double y, double w, double h, const char* cfill, const char* cstrk, const char* sw);
 
-/*  Desenha uma linha vertical pontilhada vermelha na posição x com o número do registrador no topo da página. */
-void svg_desenhar_registrador(double x, int reg);
+/*  Desenha uma linha vertical pontilhada vermelha na posição (x, y) com o número do registrador no topo da página. */
+void svg_desenhar_registrador(double x, double y, int reg);
 
 /*  Desenha os bounding boxes dos componentes conexos com cores diferentes e transparência de 50%. */
 void svg_desenhar_componentes(const Componentes* c);

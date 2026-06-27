@@ -60,7 +60,7 @@ void svg_desenhar_quadra(const char* cep, double x, double y, double w, double h
             x, y, cep);
 }
 
-void svg_desenhar_registrador(double x, int reg) {
+void svg_desenhar_registrador(double x, double y,int reg) {
     if(svg_arquivo == NULL)
         return;
 
@@ -68,7 +68,7 @@ void svg_desenhar_registrador(double x, int reg) {
     fprintf(svg_arquivo,
             "<line x1=\"%.2f\" y1=\"0\" x2=\"%.2f\" y2=\"%.2f\" "
             " stroke=\"red\" stroke-width=\"1\" stroke-dasharray=\"4,4\"/>\n",
-            x, x, svg_altura);
+            x, x, y);
 
     // numero do registrador no topo
     fprintf(svg_arquivo, "<text x=\"%.2f\" y=\"12\" fill=\"red\" font-size=\"10\">R%d</text>\n", x, reg);
