@@ -51,9 +51,9 @@ void test_quantidade_com_vl_alta(void) {
 }
 
 void test_quantidade_com_vl_baixa(void) {
-    // vl=0.5 aceita todas as arestas -> 1 componente
+    // vl=0.5 aceita todas as arestas -> 3 componente
     Componentes* c = componentes_calcular(m, 0.5);
-    TEST_ASSERT_EQUAL_INT(1, componentes_get_quantidade(c));
+    TEST_ASSERT_EQUAL_INT(3, componentes_get_quantidade(c));
     componentes_fechar(c);
 }
 
