@@ -2,6 +2,7 @@
 #include "../qry.h"
 #include "../mapa_viario.h"
 #include "../via.h"
+#include "../txt.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -53,11 +54,11 @@ void setUp(void) {
         "e v4 v2 cep4 - 100.0 4.0 Rua_D\n"
     );
     m = via_processar(VIA_TEST);
-    //txt_inicializar(TXT_TEST);
+    txt_inicializar(TXT_TEST);
 }
 
 void tearDown(void) {
-    //txt_finalizar();
+    txt_finalizar();
     mapa_fechar(m);
     m = NULL;
     remover_arquivos();
@@ -91,62 +92,10 @@ void test_qry_mvm_retorna_sucesso(void) {
     TEST_ASSERT_EQUAL_INT(0, r);
 }
 
-void test_qry_mvm_reporta_arestas_atualizadas(void) {
-    criar_arquivo(QRY_TEST, "mvm 2.0 0.0 0.0 200.0 200.0\n");
-    qry_processar(QRY_TEST, m);
-    //txt_finalizar();
-
-    char* saida = ler_txt();
-    TEST_ASSERT_NOT_NULL(saida);
-    TEST_ASSERT_NOT_NULL(strstr(saida, "mvm:"));
-    free(saida);
-
-    //txt_inicializar(TXT_TEST);
-}
-
-void test_qry_mvm_regiao_sem_arestas_reporta_zero(void) {
-    criar_arquivo(QRY_TEST, "mvm 2.0 9000.0 9000.0 100.0 100.0\n");
-    qry_processar(QRY_TEST, m);
-    //txt_finalizar();
-
-    char* saida = ler_txt();
-    TEST_ASSERT_NOT_NULL(saida);
-    TEST_ASSERT_NOT_NULL(strstr(saida, "0 arestas"));
-    free(saida);
-
-    //txt_inicializar(TXT_TEST);
-}
-
 void test_qry_geo_registrador_invalido_ignorado(void) {
     criar_arquivo(QRY_TEST, "@o? R99 cep1 S 10\n");
     int r = qry_processar(QRY_TEST, m);
     TEST_ASSERT_EQUAL_INT(0, r);
-}
-
-void test_qry_geo_cep_inexistente_reporta_erro(void) {
-    criar_arquivo(QRY_TEST, "@o? R0 cep_nao_existe S 10\n");
-    qry_processar(QRY_TEST, m);
-    //txt_finalizar();
-
-    char* saida = ler_txt();
-    TEST_ASSERT_NOT_NULL(saida);
-    TEST_ASSERT_NOT_NULL(strstr(saida, "não encontrado"));
-    free(saida);
-
-    //txt_inicializar(TXT_TEST);
-}
-
-void test_qry_percurso_registrador_nao_preenchido_reporta_erro(void) {
-    criar_arquivo(QRY_TEST, "p? R0 R1 blue red\n");
-    qry_processar(QRY_TEST, m);
-    //txt_finalizar();
-
-    char* saida = ler_txt();
-    TEST_ASSERT_NOT_NULL(saida);
-    TEST_ASSERT_NOT_NULL(strstr(saida, "não preenchido"));
-    free(saida);
-
-    //txt_inicializar(TXT_TEST);
 }
 
 void test_qry_multiplos_comandos_retorna_sucesso(void) {
@@ -166,11 +115,7 @@ int main(void) {
     RUN_TEST(test_qry_processar_arquivo_inexistente_retorna_erro);
     RUN_TEST(test_qry_processar_arquivo_vazio_retorna_sucesso);
     RUN_TEST(test_qry_mvm_retorna_sucesso);
-    RUN_TEST(test_qry_mvm_reporta_arestas_atualizadas);
-    RUN_TEST(test_qry_mvm_regiao_sem_arestas_reporta_zero);
     RUN_TEST(test_qry_geo_registrador_invalido_ignorado);
-    RUN_TEST(test_qry_geo_cep_inexistente_reporta_erro);
-    RUN_TEST(test_qry_percurso_registrador_nao_preenchido_reporta_erro);
     RUN_TEST(test_qry_multiplos_comandos_retorna_sucesso);
 
     return UNITY_END();

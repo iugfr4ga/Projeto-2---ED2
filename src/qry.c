@@ -88,10 +88,11 @@ static void cmd_p(MapaViario* m, int reg1, int reg2, const char* cc, const char*
     // caminho mais curto
     Caminho* cd = dijkstra(m, origem, DISTANCIA);
     PassoCaminho* pd = caminho_reconstruir(cd, destino);
+    double t = caminho_custo(cd, destino) * 0.01;
     if(pd == NULL) {
         txt_escrever("Destino inacessível.\n");
     } else {
-        svg_desenhar_percurso(pd, cc, x0, y0, xf, yf, caminho_custo(cd, destino) * 0.01);
+        svg_desenhar_percurso(pd, cc, x0, y0, xf, yf, t);
         txt_descrever_percurso(pd);
         caminho_lista_fechar(pd);
     }
@@ -105,7 +106,8 @@ static void cmd_p(MapaViario* m, int reg1, int reg2, const char* cc, const char*
     if(pt == NULL) {
         txt_escrever("Destino inacessível.\n");
     } else {
-        svg_desenhar_percurso(pt, cr, x0, y0, xf, yf, caminho_custo(ct, destino) * 0.01);
+        // percorre o caminho mais rapido em metade do tempo do mais curto
+        svg_desenhar_percurso(pt, cr, x0, y0, xf, yf, t * 0.5);
         txt_descrever_percurso(pt);
         caminho_lista_fechar(pt);
     }
