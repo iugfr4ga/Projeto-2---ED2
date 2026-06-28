@@ -54,6 +54,31 @@ static void cmd_regs(MapaViario* m, double vl) {
     componentes_fechar(c);
 }
 
+static void atualizar_e_desenhar_aresta_e_oposta(const Vertice* origem, const Aresta* aresta, double vl) {
+    if(origem == NULL || aresta == NULL)
+        return;
+
+    const Vertice* destino = aresta_get_destino(aresta);
+
+    if(aresta_get_vm(aresta) < vl) {
+        aresta_atualizar_vm((Aresta*) aresta);
+        svg_desenhar_aresta(origem, aresta);
+    }
+
+    for(const Aresta* oposta = vertice_get_arestas(destino);
+        oposta != NULL;
+        oposta = aresta_get_prox(oposta)) {
+
+        if(aresta_get_destino(oposta) == origem) {
+            if(aresta_get_vm(oposta) < vl) {
+                aresta_atualizar_vm((Aresta*) oposta);
+                svg_desenhar_aresta(destino, oposta);
+            }
+            break;
+        }
+    }
+}
+
 static void cmd_exp(MapaViario* m, double vl) {
     AGM* agm = agm_calcular(m);
     if(agm == NULL) 
@@ -64,8 +89,7 @@ static void cmd_exp(MapaViario* m, double vl) {
         const Vertice* v = mapa_get_vertice_por_indice(m, i);
         for(const Aresta* a = vertice_get_arestas(v); a != NULL; a = aresta_get_prox(a)) {
             if(agm_contem_aresta(agm, a) && aresta_get_vm(a) < vl) {
-                aresta_atualizar_vm((Aresta*)a);
-                svg_desenhar_aresta(v, a);
+                atualizar_e_desenhar_aresta_e_oposta(v, a, vl);
             }
         }
     }   
