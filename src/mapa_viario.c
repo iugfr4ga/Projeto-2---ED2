@@ -160,6 +160,10 @@ const Vertice* mapa_vertice_mais_proximo(const MapaViario* m, double x, double y
     return mais_proximo;
 }
 
+static int ponto_dentro(double px, double py, double x, double y, double w, double h) {
+    return px >= x && px <= x + w && py >= y && py <= y + h;
+}
+
 int mapa_atualizar_vm_regiao(MapaViario* m, double x, double y, double w, double h, double vm) {
     if(m == NULL)
         return 0;
@@ -167,10 +171,11 @@ int mapa_atualizar_vm_regiao(MapaViario* m, double x, double y, double w, double
     int atualizadas = 0;
  
     for(int i = 0; i < m->n_inseridos; i++) {
-        Vertice* v = &m->vertices[i];
- 
-        if(v->x >= x && v->x <= x + w && v->y >= y && v->y <= y + h) {
-            for(Aresta* a = v->arestas; a != NULL; a = a->prox) {
+        Vertice* origem = &m->vertices[i];
+
+        for(Aresta* a = origem->arestas; a != NULL; a = a->prox) {
+            Vertice* destino = a->destino;
+            if(ponto_dentro(origem->x, origem->y, x, y, w, h) || ponto_dentro(destino->x, destino->y, x, y, w, h)) {
                 a->vm = vm;
                 atualizadas++;
             }
