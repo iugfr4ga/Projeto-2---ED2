@@ -5,7 +5,7 @@
 #include "agm.h"
 #include "dijkstra.h"
 #include "svg.h"
-//#include "txt.h"
+#include "txt.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -32,8 +32,10 @@ static void cmd_o(int reg, const char* cep, char face, int num) {
     registradores[reg].y = y;
     registradores[reg].valido = 1;
 
-    svg_desenhar_registrador(x, reg);
-    // TODO: txt reportar coordenada
+    svg_desenhar_registrador(x, y, reg);
+    char linha[QRY_LINHA_TAM];
+    snprintf(linha, sizeof(linha), "[@o?]\nR%d Coordenadas: (%.2lf, %.2lf)\n", reg, x, y);
+    txt_escrever(linha);
 }
 
 static void cmd_mvm(MapaViario* m, double v, double x, double y, double w, double h) {
@@ -45,7 +47,9 @@ static void cmd_regs(MapaViario* m, double vl) {
     if(c == NULL) 
         return;
 
-    // TODO: txt reportar num componentes conexos
+    char linha[QRY_LINHA_TAM];
+    snprintf(linha, sizeof(linha), "[regs]\nNúmero de componentes conexos: %d\n", componentes_get_quantidade(c));
+    txt_escrever(linha);
     svg_desenhar_componentes(c);
     componentes_fechar(c);
 }
@@ -60,11 +64,11 @@ static void cmd_exp(MapaViario* m, double vl) {
         const Vertice* v = mapa_get_vertice_por_indice(m, i);
         for(const Aresta* a = vertice_get_arestas(v); a != NULL; a = aresta_get_prox(a)) {
             if(agm_contem_aresta(agm, a) && aresta_get_vm(a) < vl) {
-                // TODO: atualizar velocidade da aresta
+                aresta_atualizar_vm((Aresta*)a);
                 svg_desenhar_aresta(v, a);
             }
         }
-    }
+    }   
     agm_fechar(agm);
 }
 
@@ -75,29 +79,34 @@ static void cmd_p(MapaViario* m, int reg1, int reg2, const char* cc, const char*
     double x0 = registradores[reg1].x, y0 = registradores[reg1].y;
     double xf = registradores[reg2].x, yf = registradores[reg2].y;
 
-    const Vertice* origem  = mapa_vertice_mais_proximo(m, x0, y0);
+    const Vertice* origem = mapa_vertice_mais_proximo(m, x0, y0);
     const Vertice* destino = mapa_vertice_mais_proximo(m, xf, yf);
+    char linha[QRY_LINHA_TAM];
+    snprintf(linha, sizeof(linha), "[p?]\nCaminho mais curto entre R%d e R%d:\n", reg1, reg2);
+    txt_escrever(linha);
 
     // caminho mais curto
     Caminho* cd = dijkstra(m, origem, DISTANCIA);
     PassoCaminho* pd = caminho_reconstruir(cd, destino);
     if(pd == NULL) {
-        // TODO: txt destino inacessivel
+        txt_escrever("Destino inacessível.\n");
     } else {
         svg_desenhar_percurso(pd, cc, x0, y0, xf, yf, caminho_custo(cd, destino) * 0.01);
-        // TODO: txt descrever percurso
+        txt_descrever_percurso(pd);
         caminho_lista_fechar(pd);
     }
     caminho_fechar(cd);
 
+    snprintf(linha, sizeof(linha), "Caminho mais rápido entre R%d e R%d:\n", reg1, reg2);
+    txt_escrever(linha);
     // caminho mais rapido
     Caminho* ct = dijkstra(m, origem, TEMPO);
     PassoCaminho* pt = caminho_reconstruir(ct, destino);
     if(pt == NULL) {
-        // TODO: txt destino inacessivel
+        txt_escrever("Destino inacessível.\n");
     } else {
         svg_desenhar_percurso(pt, cr, x0, y0, xf, yf, caminho_custo(ct, destino) * 0.01);
-        // TODO: txt descrever percurso
+        txt_descrever_percurso(pt);
         caminho_lista_fechar(pt);
     }
     caminho_fechar(ct);
