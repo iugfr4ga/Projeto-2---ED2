@@ -1,5 +1,6 @@
 #include "dijkstra.h"
 #include "mapa_viario.h"
+#include "fila_prioridade.h"
 #include <stdlib.h>
 #include <float.h>
 
@@ -9,7 +10,6 @@ struct Caminho {
     int* anterior;
     const Aresta** aresta_anterior;
     int nv;
-    Criterio criterio;
 };
 
 struct PassoCaminho {
@@ -32,7 +32,6 @@ Caminho* dijkstra(const MapaViario* m, const Vertice* origem, Criterio criterio)
 
     c->m = m;
     c->nv = nv;
-    c->criterio = criterio;
     c->dist = malloc(nv * sizeof(double));
     c->anterior = malloc(nv * sizeof(int));
     c->aresta_anterior = malloc(nv * sizeof(Aresta*));
@@ -43,8 +42,10 @@ Caminho* dijkstra(const MapaViario* m, const Vertice* origem, Criterio criterio)
     }
 
     int* visitado = calloc(nv, sizeof(int));
-    if(visitado == NULL) {
+    FilaPrioridade* f = fila_prioridade_criar();
+    if(visitado == NULL || f == NULL) {
         caminho_fechar(c);
+        fila_prioridade_fechar(f);
         return NULL;
     }
 
@@ -54,21 +55,15 @@ Caminho* dijkstra(const MapaViario* m, const Vertice* origem, Criterio criterio)
         c->aresta_anterior[i] = NULL;
     }
 
-    int orig = vertice_get_indice(origem);
+    int orig = vertice_get_indice(origem);  
     c->dist[orig] = 0.0;
+    fila_prioridade_inserir(f, 0.0, orig);
 
-    for(int j = 0; j < nv; j++) {
-        // busca vertice não visitado com menor custo
-        // depois fazer fila de prioridade se necessario
-        int u = -1;
-        for(int i = 0; i < nv; i++) {
-            if(!visitado[i] && (u == -1 || c->dist[i] < c->dist[u]))
-                u = i;
-        }
+    while(!fila_prioridade_vazia(f)) {
+        int u = fila_prioridade_remover(f);
 
-        if(u == -1 || c->dist[u] == DBL_MAX)
-            break;
-
+        if(visitado[u])
+            continue;
         visitado[u] = 1;
 
         const Vertice* vu = mapa_get_vertice_por_indice(m, u);
@@ -83,10 +78,12 @@ Caminho* dijkstra(const MapaViario* m, const Vertice* origem, Criterio criterio)
                 c->dist[v] = c->dist[u] + peso;
                 c->anterior[v] = u;
                 c->aresta_anterior[v] = a;
+                fila_prioridade_inserir(f, c->dist[v], v);
             }
         }
     }
     free(visitado);
+    fila_prioridade_fechar(f);
     return c;
 }
 
