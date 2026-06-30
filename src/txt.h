@@ -3,6 +3,11 @@
 
 #include "dijkstra.h"
 
+/*  O módulo TXT é responsável por gerar um arquivo de saída com a extensão .txt contendo as informações textuais 
+    solicitadas pelos comandos do arquivo .qry. Ele deve ser inicializado antes de processar o arquivo .qry e 
+    finalizado ao final do programa para fechar o arquivo TXT.
+*/
+
 /*  Inicializa o módulo TXT criando o arquivo de saída no caminho indicado.
     Retorna 0 em sucesso ou -1 em erro.
 */
@@ -14,8 +19,7 @@ void txt_finalizar(void);
 /*  Escreve uma linha no arquivo TXT. */
 void txt_escrever(const char* linha);
 
-/*  Descreve textualmente o percurso dado como lista de PassoCaminho.
-*/
+/*  Descreve textualmente o percurso dado como lista de PassoCaminho. */
 void txt_descrever_percurso(const PassoCaminho* percurso);
 
 #endif

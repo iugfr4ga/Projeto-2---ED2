@@ -5,6 +5,19 @@
 #include "comp_conexos.h"
 #include "dijkstra.h"
 
+/*  O módulo SVG é responsável por gerar um arquivo SVG de saída com a representação gráfica da cidade. 
+    Ele deve ser inicializado antes de processar os arquivos .geo e .qry e finalizado ao final do programa para 
+    fechar o arquivo SVG.
+
+    O arquivo SVG gerado tem as seguintes características:
+
+    - A origem (0,0) é o canto superior esquerdo da cidade.
+
+    - O eixo x cresce para a direita e o eixo y cresce para baixo.
+
+    - As coordenadas N, S, L, O são invertidas.
+*/
+
 /*  Inicializa o arquivo SVG no caminho dado com as dimensões fornecidas.
     Retorna 0 em sucesso ou -1 em erro.
 */
@@ -24,7 +37,7 @@ void svg_desenhar_registrador(double x, double y, int reg);
 /*  Desenha os bounding boxes dos componentes conexos com cores diferentes e transparência de 50%. */
 void svg_desenhar_componentes(const Componentes* c);
 
-/*  Desenha uma aresta da AGM com linha grossa vermelha, sendo a origem o vértice de onde a aresta parte. */
+/*  Desenha uma aresta com linha grossa vermelha, sendo a origem o vértice de onde a aresta parte. */
 void svg_desenhar_aresta(const Vertice* origem, const Aresta* a);
 
 /*  Desenha e anima o percurso dado com a cor especificada, as coordenadas de inicio e fim do trajeto e a

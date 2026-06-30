@@ -3,6 +3,13 @@
 
 #include "mapa_viario.h"
 
+/*  Módulo responsável pelo cálculo dos componentes fortemente conexos do mapa viário.
+    Para um conjunto de vértices formar um componente fortemente conexo, deve existir caminho de ida e volta 
+    entre todos os pares de vértices desse conjunto.  
+    O módulo também calcula as dimensões do retângulo que envolve cada componente, usado para desenhar as 
+    regiões no SVG.
+*/
+
 typedef struct Componentes Componentes;
 
 /*  Calcula os componentes conexos do mapa viário desconsiderando

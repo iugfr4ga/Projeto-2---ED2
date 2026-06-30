@@ -1,6 +1,11 @@
 #ifndef FILA_PRIORIDADE_H
 #define FILA_PRIORIDADE_H
 
+/*  Uma fila de prioridade é composta por uma lista encadeada ordenada por prioridade crescente. 
+    O módulo permite inserir elementos associados a uma prioridade e remover sempre o elemento de menor
+    prioridade, além de consultar o número de elementos e verificar se a fila está vazia.
+*/
+
 typedef struct FilaPrioridade FilaPrioridade;
 
 /*  Cria uma fila de prioridade vazia. Retorna NULL em erro.

@@ -4,7 +4,7 @@
 #include "via.h"
 #include "qry.h"
 #include "svg.h"
-//#include "txt.h"
+#include "txt.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -143,14 +143,14 @@ int main(int argc, char *argv[]) {
         if(svg_inicializar(caminho_svg_qry, 50000, 50000) != 0) {
             printf("Erro ao inicializar SVG de consultas.\n");
         } 
-        //else if(txt_inicializar(caminho_txt_qry) != 0) {
-        //    printf("Erro ao inicializar TXT de consultas.\n");
-         //   svg_finalizar();
-        //} 
+        else if(txt_inicializar(caminho_txt_qry) != 0) {
+            printf("Erro ao inicializar TXT de saída.\n");
+            svg_finalizar();
+        } 
         else {          
             cidade_desenhar_quadras();
             qry_processar(caminho_qry, m);
-            //txt_finalizar();
+            txt_finalizar();
             svg_finalizar();
         }
     }

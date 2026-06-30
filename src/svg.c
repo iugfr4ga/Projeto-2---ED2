@@ -9,7 +9,6 @@
 #define SVG_MAX_CORES 12
 
 static FILE* svg_arquivo = NULL;
-static double svg_altura = 0.0;
 
 static const char* cores_componentes[SVG_MAX_CORES] = {"red", "blue", "green", "orange", "purple", "cyan", "magenta", 
     "yellow", "brown", "pink", "lime", "teal"};
@@ -24,8 +23,6 @@ int svg_inicializar(const char* caminho, double largura, double altura) {
     svg_arquivo = fopen(caminho, "w");
     if(svg_arquivo == NULL) 
         return -1;
-
-    svg_altura = altura;
 
     fprintf(svg_arquivo,"<svg xmlns=\"http://www.w3.org/2000/svg\" "
             " xmlns:xlink=\"http://www.w3.org/1999/xlink\" "
@@ -107,7 +104,7 @@ void svg_desenhar_aresta(const Vertice* origem, const Aresta* a) {
 
     fprintf(svg_arquivo,
             "<line x1=\"%.2f\" y1=\"%.2f\" x2=\"%.2f\" y2=\"%.2f\" "
-            " stroke=\"red\" stroke-width=\"4\"/>\n",
+            " stroke=\"red\" stroke-width=\"3\"/>\n",
             x1, y1, x2, y2);
 }
 
@@ -131,17 +128,19 @@ void svg_desenhar_percurso(const PassoCaminho* percurso, const char* cor, double
     // termina na coordenada real de fim
     fprintf(svg_arquivo, " L %.2f,%.2f\" fill=\"none\" stroke=\"%s\" stroke-width=\"3\"/>\n", x_fim, y_fim, cor);
 
-    // placa I no início
+    // placa I no inicio
     fprintf(svg_arquivo,
-        "<text x=\"%.2f\" y=\"%.2f\" fill=\"%s\" font-size=\"12\" "
-        "font-weight=\"bold\">I</text>\n",
-        x_inicio, y_inicio, cor);
+        "<circle cx=\"%.2f\" cy=\"%.2f\" r=\"8\" fill=\"green\" stroke=\"black\" stroke-width=\"1\"/>\n"
+        "<text x=\"%.2f\" y=\"%.2f\" fill=\"white\" font-size=\"10\" "
+        "font-weight=\"bold\" text-anchor=\"middle\" dominant-baseline=\"middle\">I</text>\n",
+        x_inicio, y_inicio, x_inicio, y_inicio);
 
     // placa F no fim
     fprintf(svg_arquivo,
-        "<text x=\"%.2f\" y=\"%.2f\" fill=\"%s\" font-size=\"12\" "
-        "font-weight=\"bold\">F</text>\n",
-        x_fim, y_fim, cor);
+        "<circle cx=\"%.2f\" cy=\"%.2f\" r=\"8\" fill=\"red\" stroke=\"black\" stroke-width=\"1\"/>\n"
+        "<text x=\"%.2f\" y=\"%.2f\" fill=\"white\" font-size=\"10\" "
+        "font-weight=\"bold\" text-anchor=\"middle\" dominant-baseline=\"middle\">F</text>\n",
+        x_fim, y_fim, x_fim, y_fim);
 
     // animação do circulo percorrendo o caminho
     fprintf(svg_arquivo,

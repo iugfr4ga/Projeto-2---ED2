@@ -3,6 +3,12 @@
 
 #include "mapa_viario.h"
 
+/*  Módulo responsável pelo cálculo de caminhos mínimos no mapa viário usando o algoritmo de Dijkstra.
+    O algoritmo pode calcular caminhos considerando diferentes critérios de custo (distância ou tempo). 
+    O resultado é armazenado em uma estrutura Caminho, que contém os custos mínimos a partir do vértice de origem
+    e as informações necessárias para reconstruir o percurso até qualquer destino alcançável.
+*/
+
 typedef struct Caminho Caminho;
 typedef struct PassoCaminho PassoCaminho; // Armazena o vértice e a aresta usada pra chegar nele.
 

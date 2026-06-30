@@ -1,6 +1,14 @@
 #ifndef MAPA_VIARIO_H
 #define MAPA_VIARIO_H
 
+/*  Um mapa viário é composto por um conjunto de vértices e arestas armazenados
+    na forma de um grafo direcionado. Os vértices representam os extremos de um segmento
+    de rua e são identificados por um id e por suas coordenadas (x, y). As arestas representam
+    segmentos de ruas entre dois vértices, armazenando os CEPs das quadras
+    adjacentes (ldir e lesq), seu comprimento (cmp), velocidade média (vm)
+    e nome da rua.
+*/
+
 typedef struct MapaViario MapaViario;
 typedef struct Vertice Vertice;
 typedef struct Aresta Aresta;

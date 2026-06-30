@@ -14,6 +14,7 @@ struct Componentes {
     double* ymax;
 };
 
+// pilha simples
 typedef struct {
     int* dados;
     int topo;
@@ -48,10 +49,6 @@ static void pilha_push(Pilha* p, int v) {
 
 static int pilha_pop(Pilha* p) {
     return p->dados[--p->topo];
-}
-
-static int pilha_vazia(Pilha* p) {
-    return p->topo == 0;
 }
 
 static void dfs1(const MapaViario* m, int inicio, int* visitado, Pilha* pilha_fim, double vl, int nv) {
@@ -193,7 +190,7 @@ Componentes* componentes_calcular(const MapaViario* m, double vl) {
         c->comp[i] = -1;
 
     int k = 0;
-    while(!pilha_vazia(pilha)) {
+    while(pilha->topo != 0) {
         int u = pilha_pop(pilha);
         if(!visitado[u]) {
             dfs2(t, u, visitado, c->comp, k, nv);
